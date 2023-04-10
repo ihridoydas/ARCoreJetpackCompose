@@ -101,19 +101,19 @@ class MainActivity : AppCompatActivity(), Scene.OnUpdateListener {
             if (cubeRenderable == null || distanceCardViewRenderable == null) return@setOnTapArPlaneListener
             // Creating Anchor.
             when (distanceMode){
+//                distanceModeArrayList[0] -> {
+//                    clearAllAnchors()
+//                    placeAnchor(hitResult, distanceCardViewRenderable!!)
+//                }
                 distanceModeArrayList[0] -> {
-                    clearAllAnchors()
-                    placeAnchor(hitResult, distanceCardViewRenderable!!)
-                }
-                distanceModeArrayList[1] -> {
                     tapDistanceOf2Points(hitResult)
                 }
-                distanceModeArrayList[2] -> {
-                    tapDistanceOfMultiplePoints(hitResult)
-                }
-                distanceModeArrayList[3] -> {
-                    tapDistanceFromGround(hitResult)
-                }
+//                distanceModeArrayList[2] -> {
+//                    tapDistanceOfMultiplePoints(hitResult)
+//                }
+//                distanceModeArrayList[3] -> {
+//                    tapDistanceFromGround(hitResult)
+//                }
                 else -> {
                     clearAllAnchors()
                     placeAnchor(hitResult, distanceCardViewRenderable!!)
@@ -324,17 +324,17 @@ class MainActivity : AppCompatActivity(), Scene.OnUpdateListener {
                 clearAllAnchors()
                 setMode()
                 toastMode()
-                if (distanceMode == distanceModeArrayList[2]){
-                    val layoutParams = multipleDistanceTableLayout.layoutParams
-                    layoutParams.height = Constants.multipleDistanceTableHeight
-                    multipleDistanceTableLayout.layoutParams = layoutParams
-                    initDistanceTable()
-                }
-                else{
+//                if (distanceMode == distanceModeArrayList[2]){
+//                    val layoutParams = multipleDistanceTableLayout.layoutParams
+//                    layoutParams.height = Constants.multipleDistanceTableHeight
+//                    multipleDistanceTableLayout.layoutParams = layoutParams
+//                    initDistanceTable()
+//                }
+               // else{
                     val layoutParams = multipleDistanceTableLayout.layoutParams
                     layoutParams.height = 0
                     multipleDistanceTableLayout.layoutParams = layoutParams
-                }
+             //   }
                 Log.i(TAG, "Selected arcore focus on ${distanceMode}")
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -596,21 +596,21 @@ class MainActivity : AppCompatActivity(), Scene.OnUpdateListener {
     @SuppressLint("SetTextI18n")
     override fun onUpdate(frameTime: FrameTime) {
         when(distanceMode) {
+//            distanceModeArrayList[0] -> {
+//                measureDistanceFromCamera()
+//            }
             distanceModeArrayList[0] -> {
-                measureDistanceFromCamera()
-            }
-            distanceModeArrayList[1] -> {
                 measureDistanceOf2Points()
             }
-            distanceModeArrayList[2] -> {
-                measureMultipleDistances()
-            }
-            distanceModeArrayList[3] -> {
-                measureDistanceFromGround()
-            }
-            else -> {
-                measureDistanceFromCamera()
-            }
+//            distanceModeArrayList[2] -> {
+//                measureMultipleDistances()
+//            }
+//            distanceModeArrayList[3] -> {
+//                measureDistanceFromGround()
+//            }
+//            else -> {
+//                measureDistanceFromCamera()
+//            }
         }
     }
 
@@ -713,9 +713,9 @@ class MainActivity : AppCompatActivity(), Scene.OnUpdateListener {
         Toast.makeText(this@MainActivity,
             when(distanceMode){
                 distanceModeArrayList[0] -> "Find plane and tap somewhere"
-                distanceModeArrayList[1] -> "Find plane and tap 2 points"
-                distanceModeArrayList[2] -> "Find plane and tap multiple points"
-                distanceModeArrayList[3] -> "Find plane and tap point"
+               // distanceModeArrayList[1] -> "Find plane and tap 2 points"
+                //distanceModeArrayList[2] -> "Find plane and tap multiple points"
+               // distanceModeArrayList[3] -> "Find plane and tap point"
                 else -> "???"
             },
             Toast.LENGTH_LONG)

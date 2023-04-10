@@ -11,9 +11,9 @@
     <string name="clear">Clear</string>
     <string name="initCM">0.0</string>
     <string-array name="distance_mode">
-        <item>@string/distance_from_camera</item>
+<!--        <item>@string/distance_from_camera</item>-->
         <item>@string/distance_of_2_points</item>
-        <item>@string/distance_of_multiple_points</item>
-        <item>@string/distance_from_ground</item>
+<!--        <item>@string/distance_of_multiple_points</item>-->
+<!--        <item>@string/distance_from_ground</item>-->
     </string-array>
 </resources>
