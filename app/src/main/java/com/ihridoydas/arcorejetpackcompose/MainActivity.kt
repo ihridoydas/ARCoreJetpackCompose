@@ -126,15 +126,15 @@ class MainActivity : AppCompatActivity(), Scene.OnUpdateListener {
     private fun initRenderable() {
         MaterialFactory.makeTransparentWithColor(
             this,
-            Color(Color.RED)
+            Color(Color.BLUE)
         )
             .thenAccept { material: Material? ->
                 cubeRenderable = ShapeFactory.makeSphere(
                     0.02f,
                     Vector3.zero(),
                     material)
-                cubeRenderable!!.setShadowCaster(false)
-                cubeRenderable!!.setShadowReceiver(false)
+                cubeRenderable!!.isShadowCaster = false
+                cubeRenderable!!.isShadowReceiver = false
             }
             .exceptionally {
                 val builder = AlertDialog.Builder(this)
