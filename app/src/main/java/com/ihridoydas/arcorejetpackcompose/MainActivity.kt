@@ -36,8 +36,6 @@ class MainActivity : AppCompatActivity(), Scene.OnUpdateListener {
 
     private var arFragment: ArFragment? = null
 
-    private var distanceModeTextView: TextView? = null
-
     private lateinit var arrow1UpLinearLayout: LinearLayout
     private lateinit var arrow1DownLinearLayout: LinearLayout
     private lateinit var arrow1UpRenderable: Renderable
@@ -48,14 +46,9 @@ class MainActivity : AppCompatActivity(), Scene.OnUpdateListener {
     private lateinit var arrow10UpRenderable: Renderable
     private lateinit var arrow10DownRenderable: Renderable
 
-    private lateinit var multipleDistanceTableLayout: TableLayout
-
     private var cubeRenderable: ModelRenderable? = null
     private var distanceCardViewRenderable: ViewRenderable? = null
 
-    private lateinit var distanceModeSpinner: Spinner
-    private val distanceModeArrayList = ArrayList<String>()
-    private var distanceMode: String = ""
 
     private val placedAnchors = ArrayList<Anchor>()
     private val placedAnchorNodes = ArrayList<AnchorNode>()
@@ -75,17 +68,11 @@ class MainActivity : AppCompatActivity(), Scene.OnUpdateListener {
         }
 
         setContentView(R.layout.activity_main)
-        val distanceModeArray = resources.getStringArray(R.array.distance_mode)
-        distanceModeArray.map{it->
-            distanceModeArrayList.add(it)
-        }
-        arFragment = supportFragmentManager.findFragmentById(R.id.sceneform_fragment) as ArFragment?
-        distanceModeTextView = findViewById(R.id.distance_view)
-        multipleDistanceTableLayout = findViewById(R.id.multiple_distance_table)
 
+        arFragment = supportFragmentManager.findFragmentById(R.id.sceneform_fragment) as ArFragment?
         initCM = resources.getString(R.string.initCM)
 
-        configureSpinner()
+        toastMode()
         initArrowView()
         initRenderable()
         clearButton()
@@ -93,15 +80,7 @@ class MainActivity : AppCompatActivity(), Scene.OnUpdateListener {
         arFragment!!.setOnTapArPlaneListener { hitResult: HitResult, plane: Plane?, motionEvent: MotionEvent? ->
             if (cubeRenderable == null || distanceCardViewRenderable == null) return@setOnTapArPlaneListener
             // Creating Anchor.
-            when (distanceMode){
-                distanceModeArrayList[0] -> {
-                    tapDistanceOf2Points(hitResult)
-                }
-                else -> {
-                    clearAllAnchors()
-                    placeAnchor(hitResult, distanceCardViewRenderable!!)
-                }
-            }
+            tapDistanceOf2Points(hitResult)
         }
     }
 
@@ -229,51 +208,9 @@ class MainActivity : AppCompatActivity(), Scene.OnUpdateListener {
                 return@exceptionally null
             }
     }
-
-    private fun configureSpinner(){
-        distanceMode = distanceModeArrayList[0]
-        distanceModeSpinner = findViewById(R.id.distance_mode_spinner)
-        val distanceModeAdapter = ArrayAdapter(
-            applicationContext,
-            android.R.layout.simple_spinner_item,
-            distanceModeArrayList
-        )
-        distanceModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        distanceModeSpinner.adapter = distanceModeAdapter
-        distanceModeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>?,
-                                        view: View?,
-                                        position: Int,
-                                        id: Long) {
-                val spinnerParent = parent as Spinner
-                distanceMode = spinnerParent.selectedItem as String
-                clearAllAnchors()
-                setMode()
-                toastMode()
-                    val layoutParams = multipleDistanceTableLayout.layoutParams
-                    layoutParams.height = 0
-                    multipleDistanceTableLayout.layoutParams = layoutParams
-                Log.i(TAG, "Selected arcore focus on ${distanceMode}")
-            }
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                clearAllAnchors()
-                setMode()
-                toastMode()
-            }
-        }
-    }
-
-    private fun setMode(){
-        distanceModeTextView!!.text = distanceMode
-    }
-
     private fun clearButton(){
         clearButton = findViewById(R.id.clearButton)
-        clearButton.setOnClickListener(object: View.OnClickListener {
-            override fun onClick(v: View?) {
-                clearAllAnchors()
-            }
-        })
+        clearButton.setOnClickListener { clearAllAnchors() }
     }
 
     private fun clearAllAnchors(){
@@ -373,11 +310,7 @@ class MainActivity : AppCompatActivity(), Scene.OnUpdateListener {
 
     @SuppressLint("SetTextI18n")
     override fun onUpdate(frameTime: FrameTime) {
-        when(distanceMode) {
-            distanceModeArrayList[0] -> {
-                measureDistanceOf2Points()
-            }
-        }
+        measureDistanceOf2Points()
     }
     private fun measureDistanceOf2Points(){
         if (placedAnchorNodes.size == 2) {
@@ -423,11 +356,7 @@ class MainActivity : AppCompatActivity(), Scene.OnUpdateListener {
     }
 
     private fun toastMode(){
-        Toast.makeText(this@MainActivity,
-            when(distanceMode){
-                distanceModeArrayList[0] -> "Find plane and tap somewhere"
-                else -> "???"
-            },
+        Toast.makeText(this@MainActivity,"Find plane and tap somewhere",
             Toast.LENGTH_LONG)
             .show()
     }
